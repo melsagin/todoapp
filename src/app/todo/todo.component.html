@@ -1,0 +1,93 @@
+<div class="container">
+    <div class="row">
+        <div class="col-5 mx-auto">
+            <h3 class="bg-primary text-white p-3"> <!--burada bg-primary ile arka planın mavi, 
+                text.white ile textin beyaz ve p-3 ile sağdan soldan padding işlemine tabi tutulur.-->
+                {{ getName() }} Todo List
+            </h3>
+            <div class="input-group mb-3"> 
+                <input type="text" class="form-control" 
+                [(ngModel)]="inputText"
+                (keyup.enter)="addItem();">
+                <!-- <button class="btn btn-outline-primary" (click)="addItem(txtItem)">Add</button> -->
+                <button 
+                [class]="getBtnClasses()"
+                class="btn" 
+                (click)="addItem();">Add</button>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" [(ngModel)]="displayAll" class="form-check-input" name="" id="displayAll"> 
+    <!--two way bing ngModel işlemi ile todo.component.ts deki displayAll'daki hepsini gösterme işlemi sağlanır-->
+                <label for="displayAll" class="form-check-label">Hepsini Göster</label>
+            </div>
+
+            <div class="my-2">
+             Planlanan konulardan {{ displayCount() }} tane bitti.
+            </div>
+
+            <div class="alert alert-warning" *ngIf="getItems().length == 0 else itemsTable">
+                Listede yapılacaklar kalmadı.
+            </div>
+
+            <ng-template #itemsTable>
+
+                <table class="table table-bordered" *ngIf="getItems().length > 0">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Konu</th>
+                        <th>Yapılma Durumu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of getItems(); let i = index;" [class.bg-primary]="item.durum" [class.bg-warning]="!item.durum">
+                        <td>{{ i+1 }}</td>
+                        <td>{{item.konu}}</td>
+                        <td>
+                            <!--if bloğu-->
+                            <!-- <div *ngIf="item.durum">Yes</div>
+                            <div *ngIf="!item.durum">No</div> -->
+
+                            <!-- <div [ngSwitch]="item.durum">
+                                <div *ngSwitchCase="true">Yes</div>
+                                <div *ngSwitchDefault>No</div>
+                            </div> -->
+
+                            <!--if else bloğu-->
+                            <!-- <div *ngIf="item.durum; else noTemplate">
+                                Yes
+                            </div>
+
+                            <ng-template #noTemplate>No</ng-template> -->
+
+                            <!--if then bloğu-->
+                            <!-- <div *ngIf="item.durum; then noTemplate">
+                                Burası gösterilmez.
+                            </div>
+
+                            <ng-template #noTemplate>No</ng-template> -->
+
+                            <!--if then else bloğu-->
+                            <div *ngIf="item.durum; then yesTemplate else noTemplate">
+                                Burası gösterilmez.
+                            </div>
+
+                            <ng-template #noTemplate>No</ng-template>
+                            <ng-template #yesTemplate>Yes</ng-template>
+
+
+                        </td>
+                        <td>
+                            <input type="checkbox" (change)="onActionChanged(item)" [(ngModel)]="item.durum" name="" id=""> 
+                            <!--burada checkbox da herhangi bir değişiklik yapılırsa durumu değiştir anlamına gelir-->
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+
+        </ng-template>
+
+        </div>
+    </div>
+</div>
